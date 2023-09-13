@@ -1,4 +1,5 @@
 using System.Buffers;
+using System.Diagnostics;
 using Cube.Timer;
 using Cube.Utility;
 using Microsoft.AspNetCore.Connections;
@@ -152,6 +153,8 @@ public static class ConnectionContextExtensions
         SendOptions sendOption = SendOptions.Directly,
         Type specificMiddleware = default)
     {
+        Debug.Assert(context != null);
+
         var result = new SendResult() { Completed = false };
         try
         {
@@ -226,6 +229,8 @@ public static class ConnectionContextExtensions
         SendOptions sendOption = SendOptions.Directly,
         Type specificMiddleware = default)
     {
+        Debug.Assert(context != null);
+
         var result = new SendResult() { Completed = false };
         try
         {

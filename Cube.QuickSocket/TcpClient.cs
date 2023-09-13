@@ -48,16 +48,16 @@ public class TcpClient : TcpHelper
         return this;
     }
 
-    public ValueTask<TcpClient> ConnectAsync(IPEndPoint ipEndPoint)
+    public async ValueTask<TcpClient> ConnectAsync(IPEndPoint ipEndPoint)
     {
         if (_context != null)
         {
-            return new ValueTask<TcpClient>(this);
+            return this;
         }
 
-        _ = ConnectToAsync(ipEndPoint);
+        await ConnectToAsync(ipEndPoint);
 
-        return new ValueTask<TcpClient>(this);
+        return this;
     }
 
     private async Task ConnectToAsync(IPEndPoint ipEndPoint)
