@@ -1,2 +1,1 @@
-# cube
-Yet Another Cube.
+# Cube

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <OutputType>Library</OutputType>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Cube.Timer" Version="1.0.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.Connections.Abstractions" Version="7.0.10"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0"/>
+        <PackageReference Include="System.IO.Pipelines" Version="7.0.0"/>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <None Remove="Middleware\"/>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\Cube.Utility\Cube.Utility.csproj"/>
+    </ItemGroup>
+</Project>
