@@ -47,24 +47,12 @@ public class TcpServer : TcpHelper
     }
 
 
-    public ValueTask<TcpServer> StartAsync(IPEndPoint ipEndPoint)
+    public async ValueTask<TcpServer> StartAsync(IPEndPoint ipEndPoint)
     {
         if (_listener != null)
         {
-            return new ValueTask<TcpServer>(this);
-        }
-
-        _ = StartListener(ipEndPoint);
-
-        return new ValueTask<TcpServer>(this);
-    }
-
-
-    private async Task StartListener(IPEndPoint ipEndPoint)
-    {
-        if (_listener != null)
-        {
-            return;
+            _logger.LogInformation("Tcp server is listening.");
+            return this;
         }
 
         _logger.LogInformation("Starting tcp server...");
@@ -86,8 +74,17 @@ public class TcpServer : TcpHelper
         catch (Exception e)
         {
             _logger.LogError("Binding to {}, error: {}", ipEndPoint, e.Message);
+            throw;
         }
 
+        _ = AcceptConnection();
+
+        return this;
+    }
+
+
+    private async Task AcceptConnection()
+    {
         while (!_stopTokenSource.IsCancellationRequested)
         {
             var context = await _listener!.AcceptAsync(_stopTokenSource.Token);

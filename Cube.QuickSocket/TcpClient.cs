@@ -48,23 +48,13 @@ public class TcpClient : TcpHelper
         return this;
     }
 
+
     public async ValueTask<TcpClient> ConnectAsync(IPEndPoint ipEndPoint)
     {
         if (_context != null)
         {
+            _logger.LogInformation("The connection is connected to {}", _context.RemoteEndPoint);
             return this;
-        }
-
-        await ConnectToAsync(ipEndPoint);
-
-        return this;
-    }
-
-    private async Task ConnectToAsync(IPEndPoint ipEndPoint)
-    {
-        if (_context != null)
-        {
-            return;
         }
 
         _defaultMiddlewareFeature = _middlewareBuilder.BuildAsMiddlewareFeature();
@@ -79,12 +69,16 @@ public class TcpClient : TcpHelper
         {
             _context = await clientFactory.ConnectAsync(ipEndPoint, _stopTokenSource.Token);
             _logger.LogDebug("connect to {}... ok", ipEndPoint);
-            _ = ProcessConnection(_context);
         }
         catch (Exception e)
         {
             _logger.LogError("Connecting to {}, error: {}", ipEndPoint, e);
+            throw;
         }
+
+        _ = ProcessConnection(_context);
+
+        return this;
     }
 
 
@@ -94,6 +88,7 @@ public class TcpClient : TcpHelper
         if (_context != null)
         {
             await _context.DisposeAsync();
+            _context = null;
         }
     }
 

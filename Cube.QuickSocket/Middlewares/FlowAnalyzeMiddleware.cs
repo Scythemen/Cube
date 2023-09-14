@@ -136,6 +136,8 @@ public class FlowAnalyzeMiddleware : IMiddleware
     {
         while (!_cancellationTokenSource.IsCancellationRequested)
         {
+            await Task.Delay(1000 * _options.Interval, _cancellationTokenSource.Token);
+
             _flowAnalyzeFeature.TotalInputBytes = _totalInputBytes;
             _flowAnalyzeFeature.TotalOutputBytes = _totalOutputBytes;
             _flowAnalyzeFeature.Connections = _connections;
@@ -146,8 +148,6 @@ public class FlowAnalyzeMiddleware : IMiddleware
             {
                 _logger.Log(_options.LogLevel, "FlowAnalyze: {}", _flowAnalyzeFeature);
             }
-
-            await Task.Delay(1000 * _options.Interval, _cancellationTokenSource.Token);
         }
     }
 
