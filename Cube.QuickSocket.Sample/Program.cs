@@ -11,7 +11,7 @@ namespace Cube.QuickSocket.Sample
     {
         static async Task Main(string[] args)
         {
-            var ip = new IPEndPoint(IPAddress.Any, 9910);
+            var ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9910);
 
             IConfiguration config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
