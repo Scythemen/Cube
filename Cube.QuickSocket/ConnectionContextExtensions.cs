@@ -100,9 +100,9 @@ public static class ConnectionContextExtensions
                 var middlewareFeature = ctx.Features.Get<MiddlewareFeature>();
                 if (middlewareFeature != null)
                 {
-                    foreach (var middleware in middlewareFeature.Middlewares)
+                    for (int i = middlewareFeature.Middlewares.Count - 1; i >= 0; i--)
                     {
-                        middleware.OnIdle(ctx);
+                        middlewareFeature.Middlewares[i].OnIdle(ctx);
                     }
                 }
             }
@@ -210,8 +210,9 @@ public static class ConnectionContextExtensions
                 }
 
                 result.Completed = true;
-                context.ResetIdleTime();
             }
+
+            context.ResetIdleTime();
         }
         catch (Exception e)
         {

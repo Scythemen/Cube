@@ -58,7 +58,7 @@ public class TcpHelper : IDisposable
                     break;
                 }
 
-                // reset idle timer
+                // reset idle time
                 context.ResetIdleTime();
 
                 if (finalFeatures.DecoderDelegate == null)
@@ -72,7 +72,7 @@ public class TcpHelper : IDisposable
                 lastPosition = result.Buffer.End;
 
                 long raw = result.Buffer.Length;
-               
+
                 // pass the context through the middlewares
                 decoderContext.Input = result.Buffer;
 
@@ -104,10 +104,13 @@ public class TcpHelper : IDisposable
             }
         }
 
-        // fire OnClosed event
-        foreach (var m in finalFeatures.Middlewares)
+        // cancel idle time
+        context.CancelIdleTime();
+
+        // fire OnClosed event from the last middleware
+        for (int i = finalFeatures.Middlewares.Count - 1; i >= 0; i--)
         {
-            await m.OnClosed(context);
+            await finalFeatures.Middlewares[i].OnClosed(context);
         }
 
         return context;
