@@ -5,13 +5,13 @@ using System.IO.Pipelines;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.Extensions.Logging;
 
-namespace Cube.QuickSocket.Sample
+namespace QuickSocket.Sample
 {
-    public class MiddlewareBoy : MiddlewareApple
+    public class MiddlewareCat : MiddlewareApple
     {
-        public MiddlewareBoy(ILogger<MiddlewareBoy> logger) : base(logger)
+        public MiddlewareCat(ILogger<MiddlewareCat> logger) : base(logger)
         {
-            base.Word = "boy";
+            base.Word = "cat";
         }
     }
 }

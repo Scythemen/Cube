@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 
-namespace TestCommon;
+namespace QuickSocket.UnitTest;
 
 public class LoggerInitializer
 {

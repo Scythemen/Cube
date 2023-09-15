@@ -1,11 +1,12 @@
 ﻿using System.Net;
+using Cube.QuickSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 
-namespace Cube.QuickSocket.Sample
+namespace QuickSocket.Sample
 {
     internal static partial class Program
     {

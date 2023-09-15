@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cube.QuickSocket\Cube.QuickSocket.csproj" />
-    <ProjectReference Include="..\Cube.Utility\Cube.Utility.csproj" />
+    <ProjectReference Include="..\..\Cube.QuickSocket\Cube.QuickSocket.csproj" />
+    <ProjectReference Include="..\..\Cube.Utility\Cube.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

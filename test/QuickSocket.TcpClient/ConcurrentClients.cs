@@ -5,9 +5,8 @@ using Cube.QuickSocket;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TestCommon;
 
-namespace TestTcpClient
+namespace QuickSocket.TcpClient
 {
     public class ConcurrentClients
     {
@@ -95,7 +94,7 @@ namespace TestTcpClient
             }
         }
 
-        private async Task SendMsgLoop(TcpClient client)
+        private async Task SendMsgLoop(Cube.QuickSocket.TcpClient client)
         {
             while (!_cancellationToken.IsCancellationRequested)
             {

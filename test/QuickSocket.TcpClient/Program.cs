@@ -2,9 +2,8 @@
 using Cube.QuickSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TestCommon;
 
-namespace TestTcpClient
+namespace QuickSocket.TcpClient
 {
     class Program
     {

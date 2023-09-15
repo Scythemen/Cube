@@ -3,11 +3,12 @@ using System.Buffers;
 using System.Buffers.Binary;
 using System.Collections.ObjectModel;
 using System.IO.Pipelines;
+using Cube.QuickSocket;
 using Cube.Utility;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.Extensions.Logging;
 
-namespace Cube.QuickSocket.Sample
+namespace QuickSocket.Sample
 {
     public class MiddlewareApple : IMiddleware
     {

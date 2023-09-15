@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cube.Utility;
 
-namespace TestUnit
+namespace QuickSocket.UnitTest
 {
     internal class BufferUtilTest
     {

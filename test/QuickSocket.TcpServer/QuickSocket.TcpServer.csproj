@@ -8,12 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Cube.QuickSocket\Cube.QuickSocket.csproj" />
-      <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
+        <ProjectReference Include="..\..\Cube.QuickSocket\Cube.QuickSocket.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Connections.Abstractions" Version="7.0.10" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     </ItemGroup>

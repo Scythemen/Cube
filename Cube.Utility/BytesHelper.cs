@@ -246,6 +246,20 @@ namespace Cube.Utility
             return v.Insert(v.Length - decimalPlace, ".");
         }
 
+        public static byte[] Bcd2Bytes(this string bcd)
+        {
+            // 4-bit BCD
+            if (string.IsNullOrEmpty(bcd)) return Array.Empty<byte>();
+
+            bcd = bcd.Replace(".", "");
+
+            if (bcd.Length % 2U == 1)
+            {
+                bcd = "0" + bcd;
+            }
+
+            return HexToBytes(bcd);
+        }
 
         public static long ToLong(this byte[] bs)
         {

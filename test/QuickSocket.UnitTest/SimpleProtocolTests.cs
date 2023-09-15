@@ -2,7 +2,7 @@ using System.Buffers;
 using Cube.SimpleProtocol;
 using Cube.Utility;
 
-namespace TestUnit
+namespace QuickSocket.UnitTest
 {
     public class SimpleProtocolTests
     {

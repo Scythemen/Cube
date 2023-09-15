@@ -3,9 +3,8 @@ using System.Net;
 using Cube.QuickSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TestCommon;
 
-namespace TestTcpServer
+namespace QuickSocket.TcpServer
 {
     class Program
     {
@@ -26,7 +25,7 @@ namespace TestTcpServer
                 .Configure<FallbackMiddlewareOptions>(config.GetSection(nameof(FallbackMiddlewareOptions)))
                 .Configure<FlowAnalyzeMiddlewareOptions>(config.GetSection(nameof(FlowAnalyzeMiddlewareOptions)))
                 .Configure<IConfiguration>(config)
-                .AddSingleton<TcpServer>()
+                .AddSingleton<Cube.QuickSocket.TcpServer>()
                 .AddSingleton<FlowAnalyzeMiddleware>()
                 .AddSingleton<FallbackMiddleware>()
                 .BuildServiceProvider();
@@ -40,7 +39,7 @@ namespace TestTcpServer
 
             // var stopToken = new CancellationTokenSource();
 
-            var server = await serviceProvider.GetRequiredService<TcpServer>()
+            var server = await serviceProvider.GetRequiredService<Cube.QuickSocket.TcpServer>()
                 .UseMiddleware<FlowAnalyzeMiddleware>()
                 .UseMiddleware<FallbackMiddleware>()
                 .StartAsync(addr);
