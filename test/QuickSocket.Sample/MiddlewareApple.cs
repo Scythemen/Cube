@@ -27,7 +27,7 @@ namespace QuickSocket.Sample
             _logger.LogDebug("OnConnected");
 
             // set idle time, if timeout OnIdle event will be fired.
-            connection.SetIdleTime(IdleMilliseconds);
+            connection.SetIdleTimer(IdleMilliseconds);
             _logger.LogDebug("set connection idle time milliseconds: {}", IdleMilliseconds);
 
             return Task.CompletedTask;
