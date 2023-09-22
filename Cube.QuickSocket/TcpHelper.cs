@@ -58,8 +58,8 @@ public class TcpHelper : IDisposable
                     break;
                 }
 
-                // reset idle timer
-                context.ResetIdleTime();
+                // reset idle time
+                context.ResetIdleTimer();
 
                 if (finalFeatures.DecoderDelegate == null)
                 {
@@ -113,12 +113,16 @@ public class TcpHelper : IDisposable
             }
         }
 
+        // cancel idle time
+        context.CancelIdleTimer();
+
         context.Abort();
 
-        // fire OnClosed event
-        foreach (var m in finalFeatures.Middlewares)
+        // fire OnClosed event from the last middleware
+        for (int i = finalFeatures.Middlewares.Count - 1; i >= 0; i--)
         {
-            await m.OnClosed(context);
+            finalFeatures.Middlewares[i].OnClosed(context);
+            finalFeatures.Middlewares[i].Dispose();
         }
 
         return context;

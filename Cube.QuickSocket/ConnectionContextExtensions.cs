@@ -46,13 +46,13 @@ public static class ConnectionContextExtensions
     }
 
 
-    public static void SetIdleTime(this ConnectionContext context, int idleMilliseconds)
+    public static void SetIdleTimer(this ConnectionContext context, int idleMilliseconds)
     {
-        SetIdleTime(context, TimeSpan.FromMilliseconds(idleMilliseconds));
+        SetIdleTimer(context, TimeSpan.FromMilliseconds(idleMilliseconds));
     }
 
 
-    public static void ResetIdleTime(this ConnectionContext context)
+    public static void ResetIdleTimer(this ConnectionContext context)
     {
         var feature = context.Features.Get<IdleStateFeature>();
         if (feature == null || feature.TimerTaskHandler == null)
@@ -77,7 +77,7 @@ public static class ConnectionContextExtensions
         }, context);
     }
 
-    public static void SetIdleTime(this ConnectionContext context, TimeSpan idleTime)
+    public static void SetIdleTimer(this ConnectionContext context, TimeSpan idleTime)
     {
         if (idleTime.TotalMilliseconds < 1)
         {
@@ -100,9 +100,9 @@ public static class ConnectionContextExtensions
                 var middlewareFeature = ctx.Features.Get<MiddlewareFeature>();
                 if (middlewareFeature != null)
                 {
-                    foreach (var middleware in middlewareFeature.Middlewares)
+                    for (int i = middlewareFeature.Middlewares.Count - 1; i >= 0; i--)
                     {
-                        middleware.OnIdle(ctx);
+                        middlewareFeature.Middlewares[i].OnIdle(ctx);
                     }
                 }
             }
@@ -110,7 +110,7 @@ public static class ConnectionContextExtensions
     }
 
 
-    public static void CancelIdleTime(this ConnectionContext context)
+    public static void CancelIdleTimer(this ConnectionContext context)
     {
         var feature = context.Features.Get<IdleStateFeature>();
         feature?.TimerTaskHandler?.Cancel();
@@ -210,8 +210,9 @@ public static class ConnectionContextExtensions
                 }
 
                 result.Completed = true;
-                context.ResetIdleTime();
             }
+
+            context.ResetIdleTimer();
         }
         catch (Exception e)
         {
