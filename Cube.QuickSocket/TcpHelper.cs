@@ -72,7 +72,7 @@ public class TcpHelper : IDisposable
                 lastPosition = result.Buffer.End;
 
                 long raw = result.Buffer.Length;
-               
+
                 // pass the context through the middlewares
                 decoderContext.Input = result.Buffer;
 
@@ -94,6 +94,15 @@ public class TcpHelper : IDisposable
                     context.ConnectionId, context.RemoteEndPoint, context.LocalEndPoint, ex.Message);
                 break;
             }
+            catch (OperationCanceledException optCancel)
+            {
+                if (_stopTokenSource.IsCancellationRequested)
+                {
+                    _logger.LogTrace("ConnectionId: {}, R:{}, L:{}, error: {}",
+                        context.ConnectionId, context.RemoteEndPoint, context.LocalEndPoint, optCancel.Message);
+                    break;
+                }
+            }
             catch (Exception e)
             {
                 // anyway consume the data 
@@ -103,6 +112,8 @@ public class TcpHelper : IDisposable
                     context.ConnectionId, context.RemoteEndPoint, context.LocalEndPoint, e);
             }
         }
+
+        context.Abort();
 
         // fire OnClosed event
         foreach (var m in finalFeatures.Middlewares)

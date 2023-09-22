@@ -57,14 +57,6 @@ public class TcpServer : TcpHelper
 
         _logger.LogInformation("Starting tcp server...");
 
-        _defaultMiddlewareFeature = _middlewareBuilder.BuildAsMiddlewareFeature();
-
-
-        if (_defaultMiddlewareFeature.Middlewares.Count == 0)
-        {
-            _logger.LogWarning("Tcp server {} middleware not set.", ipEndPoint);
-        }
-
         try
         {
             var server = new SocketTransportFactory(_options, _serviceProvider.GetService<ILoggerFactory>());
@@ -75,6 +67,13 @@ public class TcpServer : TcpHelper
         {
             _logger.LogError("Binding to {}, error: {}", ipEndPoint, e.Message);
             throw;
+        }
+
+        _defaultMiddlewareFeature = _middlewareBuilder.BuildAsMiddlewareFeature();
+
+        if (_defaultMiddlewareFeature.Middlewares.Count == 0)
+        {
+            _logger.LogWarning("Tcp server {} middleware not set.", ipEndPoint);
         }
 
         _ = AcceptConnection();
@@ -88,7 +87,10 @@ public class TcpServer : TcpHelper
         while (!_stopTokenSource.IsCancellationRequested)
         {
             var context = await _listener!.AcceptAsync(_stopTokenSource.Token);
-            _ = ProcessConnection(context);
+            if (context != null)
+            {
+                _ = ProcessConnection(context);
+            }
         }
 
         _stopTokenSource.Cancel();
@@ -100,9 +102,14 @@ public class TcpServer : TcpHelper
         _logger.LogInformation("Shutdown tcp server {}...", _listener?.EndPoint);
         if (_listener != null)
         {
-            await _listener.UnbindAsync(_stopTokenSource!.Token);
+            await _listener.UnbindAsync();
             await _listener.DisposeAsync();
             _listener = null;
+        }
+
+        foreach (var m in _defaultMiddlewareFeature.Middlewares)
+        {
+            m.Dispose();
         }
     }
 

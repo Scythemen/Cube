@@ -57,13 +57,6 @@ public class TcpClient : TcpHelper
             return this;
         }
 
-        _defaultMiddlewareFeature = _middlewareBuilder.BuildAsMiddlewareFeature();
-
-        if (_defaultMiddlewareFeature.Middlewares.Count == 0)
-        {
-            _logger.LogWarning("[{}]: Middleware not set.", ipEndPoint);
-        }
-
         var clientFactory = new SocketConnectionFactory(_options, _serviceProvider.GetService<ILoggerFactory>());
         try
         {
@@ -74,6 +67,13 @@ public class TcpClient : TcpHelper
         {
             _logger.LogError("Connecting to {}, error: {}", ipEndPoint, e);
             throw;
+        }
+
+        _defaultMiddlewareFeature = _middlewareBuilder.BuildAsMiddlewareFeature();
+
+        if (_defaultMiddlewareFeature.Middlewares.Count == 0)
+        {
+            _logger.LogWarning("[{}]: Middleware not set.", ipEndPoint);
         }
 
         _ = ProcessConnection(_context);
@@ -89,6 +89,11 @@ public class TcpClient : TcpHelper
         {
             await _context.DisposeAsync();
             _context = null;
+        }
+
+        foreach (var m in _defaultMiddlewareFeature.Middlewares)
+        {
+            m.Dispose();
         }
     }
 
