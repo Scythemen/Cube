@@ -28,10 +28,10 @@ public class FlowAnalyzeMiddleware : IMiddleware
     public double OutputRate => GetOutputRate();
 
 
-    private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource _stopTokenSource = new CancellationTokenSource();
 
     public FlowAnalyzeMiddleware(
-        ILogger<FlowAnalyzeMiddleware> logger,
+        ILogger<FlowAnalyzeMiddleware> logger = null,
         IOptions<FlowAnalyzeMiddlewareOptions> options = null)
     {
         _logger = logger == null ? NullLogger.Instance : logger;
@@ -134,9 +134,9 @@ public class FlowAnalyzeMiddleware : IMiddleware
 
     private async Task UpdateAsync()
     {
-        while (!_cancellationTokenSource.IsCancellationRequested)
+        while (!_stopTokenSource.IsCancellationRequested)
         {
-            await Task.Delay(1000 * _options.Interval, _cancellationTokenSource.Token);
+            await Task.Delay(1000 * _options.Interval, _stopTokenSource.Token);
 
             _flowAnalyzeFeature.TotalInputBytes = _totalInputBytes;
             _flowAnalyzeFeature.TotalOutputBytes = _totalOutputBytes;
@@ -153,7 +153,7 @@ public class FlowAnalyzeMiddleware : IMiddleware
 
     public void Dispose()
     {
-        _cancellationTokenSource.Cancel();
+        _stopTokenSource.Cancel();
         _inputQueue.Clear();
         _outputQueue.Clear();
     }

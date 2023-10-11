@@ -1,23 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 25.0.1706.2
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.QuickSocket", "Cube.QuickSocket\Cube.QuickSocket.csproj", "{F64C3CC6-410E-4EAE-B890-BAB2332871C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.QuickSocket", "Cube.QuickSocket\Cube.QuickSocket.csproj", "{F64C3CC6-410E-4EAE-B890-BAB2332871C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickSocket.Sample", "test\QuickSocket.Sample\QuickSocket.Sample.csproj", "{9B8A13AC-A704-4EBC-ACB7-F83E67135B8E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickSocket.TcpServer", "test\QuickSocket.TcpServer\QuickSocket.TcpServer.csproj", "{0AB262A8-F798-4C2B-91FD-4563BBD4D401}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickSocket.TcpClient", "test\QuickSocket.TcpClient\QuickSocket.TcpClient.csproj", "{EB148410-9A0B-4841-8CF1-5AD5D06CEA92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickSocket.Sample", "test\QuickSocket.Sample\QuickSocket.Sample.csproj", "{9B8A13AC-A704-4EBC-ACB7-F83E67135B8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FB26E732-5B5A-4865-9E61-EB4EB57B5887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.Utility", "Cube.Utility\Cube.Utility.csproj", "{04D667D6-5A69-45ED-8432-7AC0E5AA1A4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.Utility", "Cube.Utility\Cube.Utility.csproj", "{04D667D6-5A69-45ED-8432-7AC0E5AA1A4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickSocket.UnitTest", "test\QuickSocket.UnitTest\QuickSocket.UnitTest.csproj", "{EFF273C2-7753-44C6-BA35-F9AD1F833574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickSocket.UnitTest", "test\QuickSocket.UnitTest\QuickSocket.UnitTest.csproj", "{EFF273C2-7753-44C6-BA35-F9AD1F833574}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube.SimpleProtocol", "Cube.SimpleProtocol\Cube.SimpleProtocol.csproj", "{48C8BD20-3E8D-4D35-AB22-1B307C2B7AE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.SimpleProtocol", "Cube.SimpleProtocol\Cube.SimpleProtocol.csproj", "{48C8BD20-3E8D-4D35-AB22-1B307C2B7AE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickSocket.TcpServerApp", "test\QuickSocket.TcpServerApp\QuickSocket.TcpServerApp.csproj", "{5B2346CF-FB70-411A-ADAB-5F3F0B8C96D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickSocket.TcpClientApp", "test\QuickSocket.TcpClientApp\QuickSocket.TcpClientApp.csproj", "{1ADA1B24-4069-4A0B-B996-C7F7C07C3B34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +33,6 @@ Global
 		{9B8A13AC-A704-4EBC-ACB7-F83E67135B8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B8A13AC-A704-4EBC-ACB7-F83E67135B8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B8A13AC-A704-4EBC-ACB7-F83E67135B8E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0AB262A8-F798-4C2B-91FD-4563BBD4D401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AB262A8-F798-4C2B-91FD-4563BBD4D401}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AB262A8-F798-4C2B-91FD-4563BBD4D401}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AB262A8-F798-4C2B-91FD-4563BBD4D401}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB148410-9A0B-4841-8CF1-5AD5D06CEA92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB148410-9A0B-4841-8CF1-5AD5D06CEA92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB148410-9A0B-4841-8CF1-5AD5D06CEA92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB148410-9A0B-4841-8CF1-5AD5D06CEA92}.Release|Any CPU.Build.0 = Release|Any CPU
 		{04D667D6-5A69-45ED-8432-7AC0E5AA1A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{04D667D6-5A69-45ED-8432-7AC0E5AA1A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04D667D6-5A69-45ED-8432-7AC0E5AA1A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,17 +45,25 @@ Global
 		{48C8BD20-3E8D-4D35-AB22-1B307C2B7AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48C8BD20-3E8D-4D35-AB22-1B307C2B7AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48C8BD20-3E8D-4D35-AB22-1B307C2B7AE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B2346CF-FB70-411A-ADAB-5F3F0B8C96D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B2346CF-FB70-411A-ADAB-5F3F0B8C96D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B2346CF-FB70-411A-ADAB-5F3F0B8C96D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B2346CF-FB70-411A-ADAB-5F3F0B8C96D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ADA1B24-4069-4A0B-B996-C7F7C07C3B34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ADA1B24-4069-4A0B-B996-C7F7C07C3B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ADA1B24-4069-4A0B-B996-C7F7C07C3B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ADA1B24-4069-4A0B-B996-C7F7C07C3B34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BD2B4ED5-A9A4-45D0-85FE-39A3B00736DA}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9B8A13AC-A704-4EBC-ACB7-F83E67135B8E} = {FB26E732-5B5A-4865-9E61-EB4EB57B5887}
-		{EB148410-9A0B-4841-8CF1-5AD5D06CEA92} = {FB26E732-5B5A-4865-9E61-EB4EB57B5887}
-		{0AB262A8-F798-4C2B-91FD-4563BBD4D401} = {FB26E732-5B5A-4865-9E61-EB4EB57B5887}
 		{EFF273C2-7753-44C6-BA35-F9AD1F833574} = {FB26E732-5B5A-4865-9E61-EB4EB57B5887}
+		{5B2346CF-FB70-411A-ADAB-5F3F0B8C96D2} = {FB26E732-5B5A-4865-9E61-EB4EB57B5887}
+		{1ADA1B24-4069-4A0B-B996-C7F7C07C3B34} = {FB26E732-5B5A-4865-9E61-EB4EB57B5887}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD2B4ED5-A9A4-45D0-85FE-39A3B00736DA}
 	EndGlobalSection
 EndGlobal

@@ -12,17 +12,21 @@ public class MiddlewareBuilder : IDisposable
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger _logger;
 
-    public MiddlewareBuilder(IServiceProvider serviceProvider)
+    public MiddlewareBuilder(IServiceProvider serviceProvider = null, ILogger<MiddlewareBuilder> logger = null)
     {
-        ArgumentNullException.ThrowIfNull(serviceProvider);
-
         _serviceProvider = serviceProvider;
-        _logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<MiddlewareBuilder>();
+        _logger = logger;
+        _logger ??= _serviceProvider == null ? NullLogger.Instance : serviceProvider.GetService<ILoggerFactory>().CreateLogger<MiddlewareBuilder>();
     }
 
 
     public MiddlewareBuilder Use<T>() where T : IMiddleware
     {
+        if (_serviceProvider == null)
+        {
+            throw new ArgumentException($"Service provider is null when use middleware {typeof(T)}");
+        }
+
         IMiddleware instance = null;
         var list = _serviceProvider.GetServices<T>();
         foreach (var item in list)
@@ -43,9 +47,11 @@ public class MiddlewareBuilder : IDisposable
         return this;
     }
 
-    public MiddlewareBuilder Use(IMiddleware middleware)
+    public MiddlewareBuilder Use(IMiddleware instance)
     {
-        _middlewares.Add(middleware);
+        ArgumentNullException.ThrowIfNull(nameof(instance));
+
+        _middlewares.Add(instance);
         return this;
     }
 
@@ -204,6 +210,10 @@ public class MiddlewareBuilder : IDisposable
 
     public void Dispose()
     {
+        foreach (var item in _middlewares)
+        {
+            item.Dispose();
+        }
         _middlewares = null;
     }
 }

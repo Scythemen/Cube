@@ -35,14 +35,14 @@ public static class ConnectionContextExtensions
     public static TimerTaskHandle AddTimerTask(this ConnectionContext context,
         int milliseconds, Action<object> action, object args)
     {
-        return TcpHelper.Timer.AddTask(TimeSpan.FromMilliseconds(milliseconds), action, args);
+        return TcpBase.Timer.AddTask(TimeSpan.FromMilliseconds(milliseconds), action, args);
     }
 
 
     public static TimerTaskHandle AddTimerTask(this ConnectionContext context,
         TimeSpan timeSpan, Action<object> action, object args)
     {
-        return TcpHelper.Timer.AddTask(timeSpan, action, args);
+        return TcpBase.Timer.AddTask(timeSpan, action, args);
     }
 
 
@@ -61,7 +61,7 @@ public static class ConnectionContextExtensions
         }
 
         feature.TimerTaskHandler.Cancel();
-        feature.TimerTaskHandler = TcpHelper.Timer.AddTask(TimeSpan.FromMilliseconds(feature.IdleMilliseconds), (connection) =>
+        feature.TimerTaskHandler = TcpBase.Timer.AddTask(TimeSpan.FromMilliseconds(feature.IdleMilliseconds), (connection) =>
         {
             if (connection is ConnectionContext ctx)
             {
@@ -93,7 +93,7 @@ public static class ConnectionContextExtensions
 
         feature.IdleMilliseconds = (int)idleTime.TotalMilliseconds;
         feature.TimerTaskHandler?.Cancel();
-        feature.TimerTaskHandler = TcpHelper.Timer.AddTask(idleTime, (connection) =>
+        feature.TimerTaskHandler = TcpBase.Timer.AddTask(idleTime, (connection) =>
         {
             if (connection is ConnectionContext ctx)
             {

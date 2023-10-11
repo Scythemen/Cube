@@ -1,30 +1,49 @@
 using Cube.QuickSocket.AspNetCore.Transport;
 using Cube.Timer;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Cube.QuickSocket;
 
-public class TcpHelper : IDisposable
+public class TcpBase : IDisposable
 {
     protected ILogger _logger;
     protected MiddlewareFeature _defaultMiddlewareFeature;
     protected readonly MiddlewareBuilder _middlewareBuilder;
     protected readonly CancellationTokenSource _stopTokenSource;
-    protected readonly IOptions<SocketTransportOptions> _options;
+    protected readonly SocketTransportOptions _socketOptions;
     protected readonly IServiceProvider _serviceProvider;
+    protected readonly ILoggerFactory _loggerFactory;
 
     internal static HashedWheelTimer Timer { get; } = new HashedWheelTimer(TimeSpan.FromMilliseconds(500), 512);
 
-    protected TcpHelper(
-        IServiceProvider serviceProvider,
-        IOptions<SocketTransportOptions> options = null)
+    protected TcpBase(SocketTransportOptions socketOptions = null, ILoggerFactory loggerFactory = null)
+    {
+        _socketOptions = socketOptions ?? new SocketTransportOptions();
+        _loggerFactory = loggerFactory ?? LoggerFactory.Create(builder =>
+        {
+            builder.AddFilter("Microsoft", LogLevel.Warning)
+                   .AddFilter("System", LogLevel.Warning)
+                   .AddFilter("Cube.QuickSocket", LogLevel.Warning);
+        });
+        _logger = _loggerFactory.CreateLogger<TcpBase>();
+
+        _middlewareBuilder = new MiddlewareBuilder(null, _loggerFactory.CreateLogger<MiddlewareBuilder>());
+        _stopTokenSource = new CancellationTokenSource();
+    }
+
+    [ActivatorUtilitiesConstructor]
+    protected TcpBase(IServiceProvider serviceProvider)
     {
         ArgumentNullException.ThrowIfNull(serviceProvider);
 
         _serviceProvider = serviceProvider;
-        _options = options ?? Options.Create<SocketTransportOptions>(new SocketTransportOptions());
+        _socketOptions = serviceProvider.GetService<IOptions<SocketTransportOptions>>()?.Value ?? new SocketTransportOptions();
+        _loggerFactory = _serviceProvider.GetService<ILoggerFactory>();
+        _logger = _loggerFactory.CreateLogger<TcpBase>();
+
         _middlewareBuilder = new MiddlewareBuilder(serviceProvider);
         _stopTokenSource = new CancellationTokenSource();
     }
@@ -122,7 +141,6 @@ public class TcpHelper : IDisposable
         for (int i = finalFeatures.Middlewares.Count - 1; i >= 0; i--)
         {
             finalFeatures.Middlewares[i].OnClosed(context);
-            finalFeatures.Middlewares[i].Dispose();
         }
 
         return context;
@@ -131,5 +149,7 @@ public class TcpHelper : IDisposable
 
     public void Dispose()
     {
+        Timer.Stop();
+        Timer.Dispose();
     }
 }

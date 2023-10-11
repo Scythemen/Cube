@@ -4,6 +4,7 @@ using System.Text;
 using Cube.Utility;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace Cube.QuickSocket;
@@ -13,9 +14,10 @@ public sealed class LoggingMiddleware : IMiddleware
     private readonly ILogger _logger;
     private LoggingMiddlewareOptions _options;
 
-    public LoggingMiddleware(IOptions<LoggingMiddlewareOptions> options, ILogger<LoggingMiddleware> logger)
+    public LoggingMiddleware(IOptions<LoggingMiddlewareOptions> options = null, ILogger<LoggingMiddleware> logger = null)
     {
         _logger = logger;
+        _logger ??= NullLogger.Instance;
         _options = options == null ? new LoggingMiddlewareOptions() : options.Value;
     }
 

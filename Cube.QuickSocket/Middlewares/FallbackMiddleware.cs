@@ -12,7 +12,7 @@ public sealed class FallbackMiddleware : IMiddleware
     private readonly FallbackMiddlewareOptions _option;
 
     public FallbackMiddleware(
-        ILogger<FallbackMiddleware> logger,
+        ILogger<FallbackMiddleware> logger = null,
         IOptions<FallbackMiddlewareOptions> options = null)
     {
         _option = options == null ? new FallbackMiddlewareOptions() : options.Value;

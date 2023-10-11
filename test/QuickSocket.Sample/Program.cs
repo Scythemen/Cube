@@ -39,7 +39,7 @@ namespace QuickSocket.Sample
 
             var stopToken = new CancellationTokenSource();
 
-            //--- tcp-server
+            //--- init tcp-server manually
             var server = await new TcpServer(serviceProvider)
                 .UseMiddleware<LoggingMiddleware>()
                 .UseMiddleware<FlowAnalyzeMiddleware>()
@@ -49,19 +49,26 @@ namespace QuickSocket.Sample
                 .UseMiddleware<FallbackMiddleware>()
                 .StartAsync(ip);
 
-            
+            // --- or get tcp-server from serviceProvider
+            //
+            // firstly, specify the constructor of TcpServer:
+            // .AddSingleton(sp => ActivatorUtilities.CreateInstance<TcpServer>(sp)) //  <------------ not addSingleton<TcpServer>()
+            //
+            // var server = serviceProvider.GetRequiredService<TcpServer>();
+
+
             //----------- tcp-client 
-            
+
             await Task.Delay(2000);
-            
+
             var client = await new TcpClient(serviceProvider)
                 .UseMiddleware<MiddlewareApple>()
                 .UseMiddleware<MiddlewareCat>()
                 .ConnectAsync(ip);
-            
+
             var bytes = System.Text.Encoding.ASCII.GetBytes("hello world");
             await client.ConnectionContext.Send(bytes);
-            
+
             await Task.Delay(2000);
             bytes = System.Text.Encoding.ASCII.GetBytes("big bang");
             await client.ConnectionContext.Send(bytes);

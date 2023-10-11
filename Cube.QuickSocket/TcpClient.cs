@@ -7,19 +7,23 @@ using Microsoft.Extensions.Options;
 
 namespace Cube.QuickSocket;
 
-public class TcpClient : TcpHelper
+public class TcpClient : TcpBase
 {
     private ConnectionContext? _context;
-
     public ConnectionContext ConnectionContext => _context;
 
-    public TcpClient(
-        IServiceProvider serviceProvider,
-        IOptions<SocketTransportOptions> options = null,
-        ILogger<TcpClient> logger = null) : base(serviceProvider, options)
+
+    public TcpClient(SocketTransportOptions options = null, ILoggerFactory loggerFactory = null)
+        : base(options, loggerFactory)
     {
-        _logger = logger;
-        _logger ??= serviceProvider.GetService<ILoggerFactory>().CreateLogger<TcpClient>();
+        _logger = _loggerFactory?.CreateLogger<TcpClient>();
+    }
+
+    [ActivatorUtilitiesConstructor]
+    public TcpClient(IServiceProvider serviceProvider)
+        : base(serviceProvider)
+    {
+        _logger = _loggerFactory?.CreateLogger<TcpClient>();
     }
 
 
@@ -37,12 +41,12 @@ public class TcpClient : TcpHelper
 
     public TcpClient UseMiddleware(IMiddleware instance)
     {
-        ArgumentNullException.ThrowIfNull(instance);
-
         if (_context != null)
         {
             throw new NotSupportedException("The server has been started, failed to config middleware");
         }
+
+        ArgumentNullException.ThrowIfNull(instance);
 
         _middlewareBuilder.Use(instance);
         return this;
@@ -57,7 +61,7 @@ public class TcpClient : TcpHelper
             return this;
         }
 
-        var clientFactory = new SocketConnectionFactory(_options, _serviceProvider.GetService<ILoggerFactory>());
+        var clientFactory = new SocketConnectionFactory(Options.Create(_socketOptions), _loggerFactory);
         try
         {
             _context = await clientFactory.ConnectAsync(ipEndPoint, _stopTokenSource.Token);
@@ -90,17 +94,18 @@ public class TcpClient : TcpHelper
             await _context.DisposeAsync();
             _context = null;
         }
+    }
+
+
+    public new async void Dispose()
+    {
+        await StopAsync();
 
         foreach (var m in _defaultMiddlewareFeature.Middlewares)
         {
             m.Dispose();
         }
-    }
 
-
-    public new void Dispose()
-    {
-        StopAsync();
         base.Dispose();
     }
 }

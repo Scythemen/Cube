@@ -3,7 +3,7 @@ using Cube.QuickSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace QuickSocket.TcpClient
+namespace QuickSocket.TcpClientApp
 {
     class Program
     {
@@ -38,15 +38,17 @@ namespace QuickSocket.TcpClient
             Console.WriteLine(" ............ ctrl+c to exit...........!");
 
             var tcs = new TaskCompletionSource<object>();
-            Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs e)
+            Console.CancelKeyPress += delegate (object sender, ConsoleCancelEventArgs e)
             {
                 e.Cancel = true;
                 tcs.TrySetResult(null);
                 stopToken.Cancel();
             };
             await tcs.Task;
-            
-            Console.WriteLine("           << ctrl+C ");
+
+            clients.Stop();
+
+            Console.WriteLine("           << exit ");
         }
     }
 }
