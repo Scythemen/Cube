@@ -92,4 +92,26 @@ public static class BufferExtensions
 
         return sb.ToString();
     }
+
+    public static byte[] ToArray(this MemorySequence<byte> memory)
+    {
+        if (memory.IsEmpty)
+        {
+            return Array.Empty<byte>();
+        }
+
+        var bs = new byte[memory.Length];
+        var i = 0;
+        foreach (var m in memory)
+        {
+            foreach (var b in m.Span)
+            {
+                bs[i] = b;
+                i++;
+            }
+        }
+
+        return bs;
+    }
+
 }
