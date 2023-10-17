@@ -1,8 +1,9 @@
-using System.Buffers;
-using System.Diagnostics;
 using Cube.Timer;
 using Cube.Utility;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.Extensions.Logging;
+using System.Buffers;
+using System.Diagnostics;
 
 namespace Cube.QuickSocket;
 
@@ -120,15 +121,20 @@ public static class ConnectionContextExtensions
         this ConnectionContext context,
         string hex,
         SendOptions sendOption = SendOptions.Directly,
-        Type specificMiddleware = default)
+        Type specificMiddleware = default,
+        ILogger logger = null)
     {
         if (string.IsNullOrWhiteSpace(hex))
         {
-            return new SendResult() { Completed = false, Message = "Argument null or empty" };
+            var res = new SendResult() { Completed = false, Message = "Argument null or empty" };
+
+            logger?.LogTrace("Failed to send, {}", res.Message);
+
+            return res;
         }
 
         var bytes = Convert.FromHexString(hex);
-        return await context.Send(new MemorySequence<byte>(bytes), sendOption, specificMiddleware);
+        return await context.Send(new MemorySequence<byte>(bytes), sendOption, specificMiddleware, logger);
     }
 
 
@@ -136,14 +142,19 @@ public static class ConnectionContextExtensions
         this ConnectionContext context,
         byte[] bytes,
         SendOptions sendOption = SendOptions.Directly,
-        Type specificMiddleware = default)
+        Type specificMiddleware = default,
+        ILogger logger = null)
     {
         if (bytes == null || bytes.Length == 0)
         {
-            return new SendResult() { Completed = false, Message = "Argument null or empty" };
+            var res = new SendResult() { Completed = false, Message = "Argument null or empty" };
+
+            logger?.LogTrace("Failed to send, {}", res.Message);
+
+            return res;
         }
 
-        return await context.Send(new MemorySequence<byte>(bytes), sendOption, specificMiddleware);
+        return await context.Send(new MemorySequence<byte>(bytes), sendOption, specificMiddleware, logger);
     }
 
 
@@ -151,7 +162,8 @@ public static class ConnectionContextExtensions
         this ConnectionContext context,
         ReadOnlySequence<byte> sequence,
         SendOptions sendOption = SendOptions.Directly,
-        Type specificMiddleware = default)
+        Type specificMiddleware = default,
+        ILogger logger = null)
     {
         Debug.Assert(context != null);
 
@@ -195,7 +207,7 @@ public static class ConnectionContextExtensions
 
                     if (deleg == null)
                     {
-                        throw new NotSupportedException($"Fail to send with options:{sendOption}, middleware {specificMiddleware} not found");
+                        throw new NotSupportedException($"Fail to send with options:{sendOption}, middleware:{specificMiddleware} not found");
                     }
 
                     await deleg.Invoke(encoderContext);
@@ -218,6 +230,7 @@ public static class ConnectionContextExtensions
         {
             result.Message = e.Message;
             result.Exception = e;
+            logger?.LogError("Failed to send, {}", e.Message);
         }
 
         return result;
@@ -228,7 +241,8 @@ public static class ConnectionContextExtensions
         this ConnectionContext context,
         MemorySequence<byte> memory,
         SendOptions sendOption = SendOptions.Directly,
-        Type specificMiddleware = default)
+        Type specificMiddleware = default,
+        ILogger logger = null)
     {
         Debug.Assert(context != null);
 
@@ -266,7 +280,7 @@ public static class ConnectionContextExtensions
 
                     if (deleg == null)
                     {
-                        throw new NotSupportedException($"Fail to send with options:{sendOption}, middleware {specificMiddleware} not found");
+                        throw new NotSupportedException($"Fail to send with options:{sendOption}, middleware:{specificMiddleware} not found");
                     }
 
                     await deleg.Invoke(encoderContext);
@@ -287,6 +301,7 @@ public static class ConnectionContextExtensions
         {
             result.Message = e.Message;
             result.Exception = e;
+            logger?.LogError("Failed to send, {}", e.Message);
         }
 
         return result;
