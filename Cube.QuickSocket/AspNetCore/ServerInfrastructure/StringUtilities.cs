@@ -769,7 +769,9 @@ internal static class StringUtilities
             // This must be explicity typed as ReadOnlySpan<byte>
             // This then becomes a non-allocating mapping to the data section of the assembly.
             // If it is a var, Span<byte> or byte[], it allocates the byte array per call.
-            ReadOnlySpan<byte> hexEncodeMap = "0123456789ABCDEF"u8;
+           // ReadOnlySpan<byte> hexEncodeMap = "0123456789ABCDEF"u8; // only work net7 and grater
+            ReadOnlySpan<byte> hexEncodeMap = new byte[] { (byte)'0', (byte)'1', (byte)'2', (byte)'3', (byte)'4', (byte)'5', (byte)'6', (byte)'7', (byte)'8', (byte)'9', (byte)'A', (byte)'B', (byte)'C', (byte)'D', (byte)'E', (byte)'F' };
+
             // Note: this only works with byte due to endian ambiguity for other types,
             // hence the later (char) casts
 

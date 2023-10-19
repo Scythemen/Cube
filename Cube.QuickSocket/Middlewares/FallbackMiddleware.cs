@@ -36,7 +36,7 @@ public sealed class FallbackMiddleware : IMiddleware
 
         if (_option.Echo)
         {
-            _ = context.Context.Send(context.Input, SendOptions.SpecificMiddleware, typeof(FallbackMiddleware));
+            _ = context.Context.Send(context.Input, SendOptions.SpecificMiddleware, typeof(FallbackMiddleware), _logger);
         }
 
         // set the protocol to keep the connection alive

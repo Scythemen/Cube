@@ -78,6 +78,7 @@ public static class ConnectionContextExtensions
         }, context);
     }
 
+
     public static void SetIdleTimer(this ConnectionContext context, TimeSpan idleTime)
     {
         if (idleTime.TotalMilliseconds < 1)
@@ -116,6 +117,7 @@ public static class ConnectionContextExtensions
         var feature = context.Features.Get<IdleStateFeature>();
         feature?.TimerTaskHandler?.Cancel();
     }
+
 
     public static async ValueTask<SendResult> Send(
         this ConnectionContext context,
@@ -306,4 +308,30 @@ public static class ConnectionContextExtensions
 
         return result;
     }
+
+
+    public static IList<IMiddleware> GetMiddlewares(this ConnectionContext context)
+    {
+        var middlewareFeature = context.Features.Get<MiddlewareFeature>();
+        if (middlewareFeature == null)
+        {
+            throw new ArgumentException($"Middleware feature not found");
+        }
+
+        return middlewareFeature.Middlewares;
+    }
+
+
+    public static IMiddleware GetMiddleware<TMiddleware>(this ConnectionContext context)
+        where TMiddleware : IMiddleware
+    {
+        var middlewareFeature = context.Features.Get<MiddlewareFeature>();
+        if (middlewareFeature == null)
+        {
+            throw new ArgumentException($"Middleware feature not found");
+        }
+
+        return middlewareFeature.Middlewares.Where(x => x.GetType().FullName == typeof(TMiddleware).FullName).FirstOrDefault();
+    }
+
 }
